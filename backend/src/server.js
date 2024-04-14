@@ -2,6 +2,7 @@ import path from "path";
 import express from "express";
 import cookieParser from "cookie-parser";
 import connectDB from "./db/db.js";
+//import dotenv from "dotenv";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 import orderRouter from "./routers/orderRouter.js";
@@ -9,7 +10,7 @@ import AppError from "./utils/AppError.js";
 import globalErrorHandler from "./controllers/errorController.js";
 
 // Configure dotenv
-// dotenv.config();
+//dotenv.config();
 
 // Connect DB
 connectDB();

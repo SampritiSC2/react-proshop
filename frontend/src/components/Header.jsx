@@ -1,12 +1,12 @@
-import { Navbar, Nav, Container, Badge, NavDropdown } from 'react-bootstrap';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { LinkContainer } from 'react-router-bootstrap';
-import logo from '../assets/logo.png';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { logout } from '../store/slices/authSlice';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Container, Badge, NavDropdown } from "react-bootstrap";
+import { FaShoppingCart, FaUser } from "react-icons/fa";
+import { LinkContainer } from "react-router-bootstrap";
+import logo from "../assets/logo.png";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { logout } from "../store/slices/authSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Header() {
   const { cartItems } = useSelector((state) => state.cart);
@@ -17,51 +17,51 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('/api/users/logout');
+      await axios.post("/api/users/logout");
       dispatch(logout());
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
       if (error?.response?.status === 401) {
         dispatch(logout());
-        navigate('/login');
+        navigate("/login");
         return;
       }
       toast(error?.response?.data?.message || error.message);
     }
   };
   return (
-    <header>
-      <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect>
+    <header className="position-sticky w-100 top-0 z-3">
+      <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
         <Container>
-          {location.pathname !== '/' && (
-            <LinkContainer to='/'>
+          {location.pathname !== "/" && (
+            <LinkContainer to="/">
               <Navbar.Brand>
-                <img src={logo} alt='ProShop Logo' />
+                <img src={logo} alt="ProShop Logo" />
                 ProShop
               </Navbar.Brand>
             </LinkContainer>
           )}
-          {location.pathname === '/' && (
+          {location.pathname === "/" && (
             <Navbar.Brand>
-              <img src={logo} alt='ProShop Logo' />
+              <img src={logo} alt="ProShop Logo" />
               ProShop
             </Navbar.Brand>
           )}
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='ms-auto'>
-              <LinkContainer to={{ pathname: '/cart', search: '' }}>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto">
+              <LinkContainer to={{ pathname: "/cart", search: "" }}>
                 <Nav.Link>
                   <FaShoppingCart /> Cart
                   {cartItems.length > 0 && (
-                    <Badge pill bg='success' className='ms-1'>
+                    <Badge pill bg="success" className="ms-1">
                       {cartItems.reduce((acc, item) => acc + item.qty, 0)}
                     </Badge>
                   )}
                 </Nav.Link>
               </LinkContainer>
               {!userInfo && (
-                <LinkContainer to={{ pathname: '/login', search: '' }}>
+                <LinkContainer to={{ pathname: "/login", search: "" }}>
                   <Nav.Link>
                     <FaUser /> Sign In
                   </Nav.Link>
@@ -69,21 +69,23 @@ function Header() {
               )}
               {userInfo && (
                 <NavDropdown title={userInfo.name}>
-                  <LinkContainer to='/profile'>
+                  <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
-                  <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Logout
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
               {userInfo && userInfo.isAdmin && (
-                <NavDropdown title='Admin'>
-                  <LinkContainer to='/admin/product-list'>
+                <NavDropdown title="Admin">
+                  <LinkContainer to="/admin/product-list">
                     <NavDropdown.Item>Products</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to='/admin/user-list'>
+                  <LinkContainer to="/admin/user-list">
                     <NavDropdown.Item>Users</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to='/admin/order-list'>
+                  <LinkContainer to="/admin/order-list">
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
