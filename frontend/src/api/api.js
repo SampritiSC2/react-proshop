@@ -1,8 +1,8 @@
-import axios from 'axios';
-import { storage } from '../firebase';
+import axios from "axios";
+import { storage } from "../firebase";
 
 export const fetchProducts = async (pageNumber = 1) => {
-  const { data } = await axios.get('/api/products', {
+  const { data } = await axios.get("/api/products", {
     params: {
       pageNumber,
     },
@@ -11,7 +11,7 @@ export const fetchProducts = async (pageNumber = 1) => {
 };
 
 export const fetchTopProducts = async () => {
-  const { data } = await axios.get('/api/products/top-products');
+  const { data } = await axios.get("/api/products/top-products");
   return data;
 };
 
@@ -23,7 +23,7 @@ export const uploadImage = async (image) => {
 
   return new Promise((resolve, reject) => {
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       () => {},
       (error) => reject(error),
       () => {
