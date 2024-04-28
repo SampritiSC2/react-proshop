@@ -40,8 +40,8 @@ function ProductDetailPage() {
   } = useInput("", validateComment);
   const [submittingReview, setSubmittingReview] = useState(false);
 
-  const product = useLoaderData();
-  const [reviews, setReviews] = useState(product.reviews);
+  const productData = useLoaderData();
+  const [product, setProduct] = useState(productData);
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.userInfo);
 
@@ -74,12 +74,12 @@ function ProductDetailPage() {
         `/api/products/${product._id}/reviews`,
         reviewData
       );
-      const { review } = data;
       toast.success("Review submitted successfully");
-      setReviews((prevReviews) => [...prevReviews, review]);
+      setProduct(data.product);
       resetRating("");
       resetComment("");
     } catch (error) {
+      console.log(error);
       toast.error(error?.response?.data?.message || error.message);
     }
     setSubmittingReview(false);
@@ -165,9 +165,9 @@ function ProductDetailPage() {
       <Row className="review">
         <Col md={6}>
           <h2>Reviews</h2>
-          {reviews.length === 0 && <Message>No Reviews</Message>}
+          {product.reviews.length === 0 && <Message>No Reviews</Message>}
           <ListGroup variant="flush">
-            {reviews.map((review) => (
+            {product.reviews.map((review) => (
               <ListGroup.Item key={review._id}>
                 <strong>{review.name}</strong>
                 <Rating value={review.rating} />

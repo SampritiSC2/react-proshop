@@ -14,6 +14,7 @@ function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  //console.log(location);
 
   const handleLogout = async () => {
     try {
@@ -21,6 +22,7 @@ function Header() {
       dispatch(logout());
       navigate("/login");
     } catch (error) {
+      //If token is invalid
       if (error?.response?.status === 401) {
         dispatch(logout());
         navigate("/login");

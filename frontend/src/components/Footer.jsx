@@ -1,4 +1,4 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from "react-bootstrap";
 
 function Footer() {
   const currentYear = new Date().getFullYear();
@@ -6,7 +6,7 @@ function Footer() {
     <footer>
       <Container>
         <Row>
-          <Col className='text-center py-3'>
+          <Col className="text-center py-3">
             <p>ProShop &copy; {currentYear}</p>
           </Col>
         </Row>

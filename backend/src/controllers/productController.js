@@ -1,6 +1,6 @@
-import catchAsync from '../utils/catchAsync.js';
-import Product from '../models/product.js';
-import AppError from '../utils/AppError.js';
+import catchAsync from "../utils/catchAsync.js";
+import Product from "../models/product.js";
+import AppError from "../utils/AppError.js";
 
 // @desc Fetch All Products
 // Route GET /api/products
@@ -14,7 +14,7 @@ export const fetchAllProducts = catchAsync(async (req, res, next) => {
     .skip(pageSize * (pageNumber - 1));
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     page: pageNumber,
     pages: Math.ceil(count / pageSize),
     products,
@@ -27,10 +27,10 @@ export const fetchAllProducts = catchAsync(async (req, res, next) => {
 export const fetchProduct = catchAsync(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
-    return next(new AppError('Product not found', 404));
+    return next(new AppError("Product not found", 404));
   }
   res.status(200).json({
-    status: 'success',
+    status: "success",
     product,
   });
 });
@@ -39,9 +39,18 @@ export const fetchProduct = catchAsync(async (req, res, next) => {
 // Route POST /api/products
 // Access private(admin)
 export const createProduct = catchAsync(async (req, res, next) => {
-  const { name, price, brand, category, countInStock, description, image } = req.body;
-  if (!name || !price || !brand || !category || !countInStock || !description || !image) {
-    return next(new AppError('All fields are required', 400));
+  const { name, price, brand, category, countInStock, description, image } =
+    req.body;
+  if (
+    !name ||
+    !price ||
+    !brand ||
+    !category ||
+    !countInStock ||
+    !description ||
+    !image
+  ) {
+    return next(new AppError("All fields are required", 400));
   }
   const product = new Product({
     name,
@@ -56,7 +65,7 @@ export const createProduct = catchAsync(async (req, res, next) => {
   });
   const createdProduct = await product.save();
   res.status(201).json({
-    status: 'success',
+    status: "success",
     product: createdProduct,
   });
 });
@@ -73,7 +82,7 @@ export const createProductReview = catchAsync(async (req, res, next) => {
       (review) => review.user.toString() === req.user._id.toString()
     );
     if (alreadyReviewed) {
-      return next(new AppError('Product already reviewed', 400));
+      return next(new AppError("Product already reviewed", 400));
     }
 
     const review = {
@@ -86,17 +95,16 @@ export const createProductReview = catchAsync(async (req, res, next) => {
     product.reviews.push(review);
     product.numReviews += 1;
     product.rating =
-      product.reviews.reduce((acc, curr) => acc + curr.rating, 0) / product.reviews.length;
+      product.reviews.reduce((acc, curr) => acc + curr.rating, 0) /
+      product.reviews.length;
 
     const updatedProduct = await product.save();
     res.status(201).json({
-      status: 'success',
-      review: updatedProduct.reviews.find(
-        (review) => review.user.toString() === req.user._id.toString()
-      ),
+      status: "success",
+      product: updatedProduct,
     });
   } else {
-    return next(new AppError('Product not found', 404));
+    return next(new AppError("Product not found", 404));
   }
 });
 
@@ -104,9 +112,18 @@ export const createProductReview = catchAsync(async (req, res, next) => {
 // Route PUT /api/products/:id
 // Access private(admin)
 export const updateProduct = catchAsync(async (req, res, next) => {
-  const { name, price, description, image, brand, category, countInStock } = req.body;
-  if (!name || !price || !brand || !category || !countInStock || !description || !image) {
-    return next(new AppError('All fields are required', 400));
+  const { name, price, description, image, brand, category, countInStock } =
+    req.body;
+  if (
+    !name ||
+    !price ||
+    !brand ||
+    !category ||
+    !countInStock ||
+    !description ||
+    !image
+  ) {
+    return next(new AppError("All fields are required", 400));
   }
   const product = await Product.findById(req.params.id);
   if (product) {
@@ -120,11 +137,11 @@ export const updateProduct = catchAsync(async (req, res, next) => {
 
     const updatedProduct = await product.save();
     res.status(200).json({
-      status: 'success',
+      status: "success",
       product: updatedProduct,
     });
   } else {
-    return next(new AppError('Product not found', 404));
+    return next(new AppError("Product not found", 404));
   }
 });
 
@@ -136,11 +153,11 @@ export const deleteProduct = catchAsync(async (req, res, next) => {
   if (product) {
     await Product.deleteOne({ _id: product._id });
     res.status(200).json({
-      status: 'success',
-      message: 'Deleted Successfully',
+      status: "success",
+      message: "Deleted Successfully",
     });
   } else {
-    return next(new AppError('Product not found', 404));
+    return next(new AppError("Product not found", 404));
   }
 });
 
@@ -148,9 +165,9 @@ export const deleteProduct = catchAsync(async (req, res, next) => {
 // Route GET /api/products/top
 // Access public
 export const fetchTop3Products = catchAsync(async (req, res, next) => {
-  const products = await Product.find({}).sort('-rating').limit(3);
+  const products = await Product.find({}).sort("-rating").limit(3);
   res.status(200).json({
-    status: 'success',
+    status: "success",
     products,
   });
 });

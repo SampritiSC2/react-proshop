@@ -73,7 +73,7 @@ const ProductForm = ({ onSubmit, product, loading, error }) => {
     countInStockError ||
     brandError ||
     priceError ||
-    (!product && !image); // if it's not in edit mode and there is no image, then it's an error
+    (!product && !image); // if it's create product mode and there is no image, then it's an error
 
   const handleSubmit = (e) => {
     e.preventDefault();

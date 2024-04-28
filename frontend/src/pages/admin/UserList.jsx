@@ -1,21 +1,21 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { Button, Table } from 'react-bootstrap';
-import { FaCheck, FaEdit, FaTimes, FaTrash } from 'react-icons/fa';
-import { LinkContainer } from 'react-router-bootstrap';
-import { json, useLoaderData } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import Paginate from '../../components/Paginate';
+import axios from "axios";
+import React, { useState } from "react";
+import { Button, Table } from "react-bootstrap";
+import { FaCheck, FaEdit, FaTimes, FaTrash } from "react-icons/fa";
+import { LinkContainer } from "react-router-bootstrap";
+import { json, useLoaderData } from "react-router-dom";
+import { toast } from "react-toastify";
+import Paginate from "../../components/Paginate";
 
 const UserListPage = () => {
   const usersData = useLoaderData();
   const [users, setUsers] = useState(usersData.users);
   const handleDeleteUser = async (id) => {
-    if (window.confirm('Are you sure you want to delete ?')) {
+    if (window.confirm("Are you sure you want to delete ?")) {
       try {
         await axios.delete(`/api/users/${id}`);
         setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
-        toast.success('User deleted successfully');
+        toast.success("User deleted successfully");
       } catch (error) {
         toast.error(error?.response?.data?.message || error.message);
       }
@@ -42,22 +42,23 @@ const UserListPage = () => {
               <td>{user.email}</td>
               <td>
                 {user.isAdmin ? (
-                  <FaCheck style={{ color: 'green' }} />
+                  <FaCheck style={{ color: "green" }} />
                 ) : (
-                  <FaTimes style={{ color: 'red' }} />
+                  <FaTimes style={{ color: "red" }} />
                 )}
               </td>
               <td>
                 <LinkContainer to={`/admin/edit-user/${user._id}`}>
-                  <Button className='btn-sm' variant='light'>
+                  <Button className="btn-sm" variant="light">
                     <FaEdit />
                   </Button>
                 </LinkContainer>
                 <Button
-                  className='ms-2 btn-sm'
-                  variant='danger'
-                  onClick={() => handleDeleteUser(user._id)}>
-                  <FaTrash style={{ color: 'white' }} />
+                  className="ms-2 btn-sm"
+                  variant="danger"
+                  onClick={() => handleDeleteUser(user._id)}
+                >
+                  <FaTrash style={{ color: "white" }} />
                 </Button>
               </td>
             </tr>
@@ -68,7 +69,7 @@ const UserListPage = () => {
         page={usersData?.page || 1}
         pages={usersData?.pages}
         isAdmin={true}
-        pageName='user-list'
+        pageName="user-list"
       />
     </>
   );
@@ -77,12 +78,14 @@ const UserListPage = () => {
 export const loader = async ({ params }) => {
   try {
     const { pageNumber } = params;
-    const { data } = await axios.get(`/api/users?pageNumber=${pageNumber || 1}`);
+    const { data } = await axios.get(
+      `/api/users?pageNumber=${pageNumber || 1}`
+    );
     return data;
   } catch (error) {
     throw json(
       {
-        title: 'An Error Occured',
+        title: "An Error Occured",
         description: error?.response?.data?.message || error.message,
       },
       { status: 500 }
